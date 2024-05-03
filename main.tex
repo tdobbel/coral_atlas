@@ -48,9 +48,6 @@
     \ead{thomas.dobbelaere@uclouvain.be}
     \author[nova]{Joana Figueiredo}
     \author[lsu]{Daniel M. Holstein}
-    \author[cimas,aoml]{Lewis J. Gramer}
-    %\author[mote]{Sara D. Williams}
-    \author[fwc]{Lucas McEachron}
     \author[eli,immc]{Emmanuel Hanert}
     \cortext[corr]{Corresponding author}
 
@@ -120,10 +117,14 @@ Such models require important computational resources and most connectivity stud
 
 \subsection*{Larval dispersal and connectivity modeling}
 
-We simulated the hydrodynamics over the entirety FCR during 10 years (2012-2021) with the multiscale ocean model \slim\footnote{\href{ https://www.slim-ocean.be}{slim-ocean.be}}. This model has already been successfully validated and applied in Florida to simulate the dispersal of larvae and disease agents \citep{frys2020fine,dobbelaere2020coupled}. \slim uses an unstructured mesh whose resolution can be locally refined in order to capture flow features and tides down to the reef scale. The model mesh was generated using the seamsh\footnote{\href{https://pypi.org/project/seamsh/}{https://pypi.org/project/seamsh/}} Python library, based on the open-source mesh generator GMSH \citep{geuzaine2009gmsh}. It was made up of $6,6\times 10^5$ triangles, whose size ranged from 50 m near reefs to 13.5 km in the open sea. The mesh element size was refined based on the distance to reefs and coastlines, as well as the bathymetry and bathymetry gradient. \slim currents were relaxed towards the operational Navy HYbrid Coordinate Ocean Model (\hycom; \citealp{chassignet2007hycom}) following the approach of \citep{dobbelaere2022impacts} to capture the baroclinic dynamics of the Florida Current. Further details about the model formulation can be found in \citep{frys2020fine}.
+We simulated the hydrodynamics over the entirety FCR during 10 years (2012-2021) with the multiscale ocean model \slim\footnote{\href{ https://www.slim-ocean.be}{slim-ocean.be}}. This model has already been successfully validated and applied in Florida to simulate the dispersal of larvae and disease agents \citep{frys2020fine,dobbelaere2020coupled}. \slim uses an unstructured mesh whose resolution can be locally refined in order to capture flow features and tides down to the reef scale (Fig. \ref{fig:mesh}). The model mesh was generated using the seamsh\footnote{\href{https://pypi.org/project/seamsh/}{https://pypi.org/project/seamsh/}} Python library, based on the open-source mesh generator GMSH \citep{geuzaine2009gmsh}. It was made up of $6,6\times 10^5$ triangles, whose size ranged from 50 m near reefs to 13.5 km in the open sea. The mesh element size was refined based on the distance to reefs and coastlines, as well as the bathymetry and bathymetry gradient. \slim currents were relaxed towards the operational Navy HYbrid Coordinate Ocean Model (\hycom; \citealp{chassignet2007hycom}) following the approach of \citep{dobbelaere2022impacts} to capture the baroclinic dynamics of the Florida Current. Further details about the model formulation can be found in \citep{frys2020fine}.
 
-\textcolor{red}{[insert figure of the mesh domain ?]}
-
+\begin{figure}
+    \centering
+    \includegraphics[width=\textwidth]{figures/fig_mesh_tnc.png}
+    \caption{Model mesh (\textbf{A}) and bathymetry (\textbf{B}) with close-up views of the simulated currents in the Dry Tortugas (\textbf{C}) and the Marquesas Keys (\textbf{D}). The different regions of Florida's Coral Reef, as defined in the Unified Reef Map are shown in panel (\textbf{B}). This illustrates the ability of the model to capture complex fine-scale flow patterns near reefs and islands. Land is shown in light grey, reefs in dark grey, and reef sub-regions with live corals are highlighted in blue.}
+    \label{fig:mesh}
+\end{figure}
 The modeled currents were then used to simulate the dispersal of coral larvae using a Lagrangian particle tracker for 6 species: \textit{Acropora cervicornis} (Acer), \textit{Colpophyllia natans} (Cnat), \textit{Diploria labyrinthiformis} (Dlab), \textit{Montastrea cavernosa} (Mcav), \textit{Orbicella faveolata} (Ofav) and \textit{Pseudodiploria strigosa} (Pstr). \textcolor{red}{[insert a few sentenced explaining why we chose these particular species]}. The particle tracker implemented larvae history traits such as mortality and competence, \ie~the ability of a larvae to settle onto a reef. Mortality was either modeled using a constant mortality $\mu$ rate or a Weibull model \citep{king2023larval} with parameters $\lambda$ and $\nu$. After time to competence $t_c$, larvae were becoming competent with rate $\alpha$ and losing competence at rate $\beta$. The species-specific spawning dates and times were defined in days after the full moon (DAFM) and minutes after sunset (MAS) \textcolor{red}{[insert data source]}. Dlab spawned in April and May, Mcav in July and August, and all other coral species spawned in July and/or August. The biological and spawning parameters used in the model are summarized in Table \ref{tab:species}.
 
 \begin{table}
@@ -147,7 +148,7 @@ The modeled currents were then used to simulate the dispersal of coral larvae us
     \caption{Biological and spawning parameters used to simulate the dispersal of larvae for each modeled species: days after the full moon (DAFM), minutes after sunset (MAS), mortality rate ($\mu$), Weibull model parameters ($\lambda$,$\nu$), time to competence ($t_c$), competence acquisition ($\alpha$) and loss ($\beta$) rates. In the case of Weibull mortality, the mortality rate at larval age $t$ was given by $\lambda\nu(\lambda t)^{\nu-1}$.}\label{tab:species}
 \end{table}
 
-The reefs of Florida were extracted from the “coral reefs and hardbottom” layer of the Unified Florida Reef Tract Map \citep{fwc2017unified}. The extracted reef polygon were then further divided into 16,823 500 m $\times$ 500 m sub-reef patches to model larval exchanges at a finer scale. We assumed a uniform coral cover over all reefs, and released a total of about $10^6$ particles over all the reef polygons during each spawning simulation. Particles in the model were not representing single larvae but rather a mass of larvae, initialized at 1. Settlement of competent larval mass onto reef was occurring at deposition rate $\gamma = 0.2$ hour$^{-1}$, consistent with observed larval settling velocity \textcolor{red}{[to be confirmed]}. For each modeled spawning, the exchanges of larval mass between reefs were recorded into connectivity matrices, whose rows correspond to source reefs and whose columns correspond to destination reefs. Connectivity matrices can be more easily interpreted as large networks whose nodes are the reefs and whose edges are the larval exchanges between reefs. Connectivity metrics can then be derived from these networks using graph theory tools. The connectivity indicators used in this study are summarized in Table \ref{tab:indicators}. Finally, we identified reef clusters inside the connectivity networks using the \textit{Strongly Connected Components} (SCC) detection algorithm \citep{nuutila1994finding}. This method groups reefs in the same community if they present numerous bidirectional connections to each other, and if they are weakly connected to reefs located in other clusters. Such methods aim at identifying ecologically separated groups, hence inferring the presence of dispersal barriers between those groups \citep{thomas2014numerical,saint2023biophysical}
+The reefs of Florida were extracted from the “coral reefs and hardbottom” layer of the Unified Florida Reef Tract Map \citep{fwc2017unified}. The extracted reef polygon were then further divided into 16,823 500 m $\times$ 500 m sub-reef patches to model larval exchanges at a finer scale (Fig. \ref{fig:mesh}). \emphc{How did TNC select the reefs with live coral cover in the shape file ?} We assumed a uniform coral cover over all reefs, and released a total of about $10^6$ particles over all the reef polygons during each spawning simulation. Particles in the model were not representing single larvae but rather a mass of larvae, initialized at 1. Settlement of competent larval mass onto reef was occurring at deposition rate $\gamma = 0.2$ hour$^{-1}$, consistent with observed larval settling velocity \textcolor{red}{[to be confirmed]}. For each modeled spawning, the exchanges of larval mass between reefs were recorded into connectivity matrices, whose rows correspond to source reefs and whose columns correspond to destination reefs. Connectivity matrices can be more easily interpreted as large networks whose nodes are the reefs and whose edges are the larval exchanges between reefs. Connectivity metrics can then be derived from these networks using graph theory tools. The connectivity indicators used in this study are summarized in Table \ref{tab:indicators}. Finally, we identified reef clusters inside the connectivity networks using the \textit{Strongly Connected Components} (SCC) detection algorithm \citep{nuutila1994finding}. This method groups reefs in the same community if they present numerous bidirectional connections to each other, and if they are weakly connected to reefs located in other clusters. Such methods aim at identifying ecologically separated groups, hence inferring the presence of dispersal barriers between those groups \citep{thomas2014numerical,saint2023biophysical}
 
 \begin{table}
     \begin{adjustwidth}{-1in}{-1in}
@@ -178,7 +179,7 @@ where $\mean{x_i}$ is the mean of sequence $\{x_i\}$. The value of $r_{\alpha\be
 
 For each species and indicator, we identified connectivity hot spots that remained consistent over the 10 simulated years. To do so, we evaluated the frequency at which the yearly value of each indicator was among the yearly top 10\% values of that indicator for all reefs. Reefs with a top 10\% frequency of 1 for a given indicator where thus found in the yearly top 10\% for that indicator every simulated year. By averaging this frequency for all species, we can identify hot spots that remained consistent for all simulated species and years for a given indicator. These species-averaged frequencies can then be multiplied to select optimal restoration sites. Such reef sites could be identified among top performers of weighted out-degree, in-degree and local retention, and low-performers of self-recruitment.
 
-Finally, we quantified the inter-annual variability of the SCC structure for all species. This was performed by counting the number of simulated years during which any given pair of reefs was found in the same SCC. This resulted in a symmetrical matrix of shape $16,823 \times 16,823$, whose entries ranged between 0 and 10. Entries of this matrix with high values indicate pairs of reefs that were consistently found in the same SCC over the 10 simulated years. Lower values of this indicator for all reef pairs would hence infer a strong inter-annual variability of the composition of the SCCs.
+Finally, we assessed the inter-annual variability of the connectivity based on the connectivity indicators and the structure of the communities in the connectivity networks. We evaluated the variability of the connectivity indicators by computing the quartile coefficient of dispersion of each indicator at each reef. The formula of the quartile coefficient of dispersal writes $(Q_3-Q_1) / (Q_3+Q_1)$, where $Q_1$ and $Q_3$ are the first and third quartiles respectively. Furthermore, we quantified the inter-annual variability of the SCC structure for all species. This was performed by counting the number of simulated years during which any given pair of reefs was found in the same SCC. This resulted in a symmetrical matrix of shape \emphc{$10,055 \times 10,055$}, whose entries ranged between 0 and 10. Entries of this matrix with high values indicate pairs of reefs that were consistently found in the same SCC over the 10 simulated years. Lower values of this indicator for all reef pairs would hence infer a strong inter-annual variability of the composition of the SCCs.
 
 % === RESULTS ===
 
@@ -210,33 +211,36 @@ Finally, we quantified the inter-annual variability of the SCC structure for all
 The Pearson correlation coefficients for the considered connectivity indicators and all pairs of coral species are show  in Fig. \ref{fig:correlation}. The most strongly correlated indicators were weighted in-degree and out-degree, with a species-averaged correlation factor of $0.901$ and $0.732$ respectively. Local retention, on the other hand, was the least strongly correlated indicator, with an average correlation factor of 0.347. Cnat and Pstr exhibited the most strongly correlated connectivity, with an average correlation factor of 0.875 over all considered indicators. Overall, connectivity indicators of Mcav, Cnat and Ofav, which have similar spawning windows, were more strongly correlated. On the other hand, the connectivity of Dlab, which spawns in April-May, was more weakly correlated with the other species, which spawn in July-August. Nevertheless, Acer and Pstr had the most weakly correlated connectivity indicators, with an average correlation coefficient of 0.574. This might be explained by the fact that Acer had the narrowest spawning window in terms of MAS, and Pstr the widest.
 
 \begin{figure}
-   \centering
-   \includegraphics[width=\textwidth]{figures/fig_correlation.png}
-   \caption{\textcolor{red}{Same as previous figure but after filtering off the reefs with no coral according to FWC}}\label{fig:correlation_r}
+    \centering
+    \includegraphics[width=\textwidth]{figures/fig_correlation.png}
+    \caption{\textbf{Top}: Pearson correlations of the distributions of local retention, weighted in-degree and out-degree, and self-recruitment for all pairs of species. \textbf{Bottom}: Spawning windows of all coral species in days after full moon. Dlab was not included in the bottom figure, as it spawns in April-May, while all other species spawn in July-August. Connectivity indicators are more strongly correlated between species with similar spawning windows}\label{fig:correlation}
 \end{figure}
 
-The top-performer reefs in terms of  local retention, weigthed in-degree and weigthed out-degree are shown in Fig. \ref{fig:top10}. A cluster of top-performers in local retention is located in the region of Biscayne Bay, although reefs with a high frequency in the top 10\% can be found on offshore reefs near Key West, and in the Dry Tortugas (Fig. \ref{fig:top10}a). Top-performers in terms of weighted in-degree are pretty widespread throughout FCR, although some clusters can be found in the Upper Keys, in the inshore reefs of the Middle Keys, at the southwestern end of the Florida Keys and in the Dry Tortugas (Fig. \ref{fig:top10}b). Top-performers in terms of weighted out-degree exhibit a clearer clustering and are mostly located in the offshore reefs of the Lower and Middle Keys, as well as on the northern end of FCR (Fig. \ref{fig:top10}b). Finally, low-performers in terms of self-recruitment are mostly located in the offshore reefs of the Lower Keys and the (northern) vicinity of Biscayne Bay (Fig. \ref{fig:top10}d). When combining this information, our model identified reef with good restoration potential in the Southern Dry Tortugas, the southwestern Florida Keys, the Upper Keys and the northern end of FCR (Fig. \ref{fig:top10}e).
+The top-performer reefs in terms of local retention, and weighted in- and out-degrees are shown in Fig. \ref{fig:top10}. Clusters of top-performers in terms of local retention were found in the Dry Tortugas, north of the Marquesas, in the Upper Keys, and in the northern Broward-Miami and Deerfield  (Fig. \ref{fig:top10}A). Top performers in terms of weighted in-degree were found in the northern part of Florida's Coral Reef (above latitude 25.6) and in the Dry Tortugas (Fig. \ref{fig:top10}B). Top-performers in terms of weighted out-degree were found in the Dry Tortugas, Biscayne, Broward-Miami regions (Fig. \ref{fig:top10}C). However, there was no clear cluster of bottom-performers in terms of self-recruitment, although most of them were found in the Lower Keys, and Biscayne, Broward-Miami and North Palm Beach regions (Fig. \ref{fig:top10}D). When combining the above-described frequencies, reefs with great restoration potential were found in the Dry Tortugas and norther Broward-Miami, and more marginally in the Middle Keys and North and South Palm Beach (Fig. \ref{fig:top10}E).
 
 \begin{figure}
    \centering
-   \includegraphics[width=0.9\textwidth]{figures/fig_top10.png}
-   \caption{Species-averaged frequency of reefs in the top 10\% yearly values for \textbf{(a)} local retention, \textbf{(b)} weighted in-degree and \textbf{(c)} weigthed out-degree. The species-averaged frequency of reefs in flop 10\% yearly values for self recruitment is shown in panel \textbf{(d)}. By multiplying these frequencies, we obtain a combined restoration indicator whose top values correspond to reefs that are top performers of weighted out-degree, in-degree and local retention, and low-performers of self-recruitment, as shown in panel \textbf{(e)}. Reefs with value 0 of the quantity highlighted in each panel are shown in black}\label{fig:top10}
+   \includegraphics[width=0.95\textwidth]{figures/fig_top10.png}
+   \caption{Species-averaged frequency of reefs in the top 10\% yearly values for \textbf{(A)} local retention, \textbf{(B)} weighted in-degree and \textbf{(C)} weighted out-degree. The species-averaged frequency of reefs in flop 10\% yearly values for self recruitment is shown in panel \textbf{(D)}. By multiplying these frequencies, we obtain a combined restoration indicator whose top values correspond to reefs that are top performers of weighted out-degree, in-degree and local retention, and low-performers of self-recruitment, as shown in panel \textbf{(E)}. Reefs with a restoration indicator of 0 are shown in black}\label{fig:top10}
 \end{figure}
 
-The structure and composition of the SCCs evolved through time for each simulated species (Fig. \ref{fig:scc}). Ofav, Acer and Mcav exhibited the least stable SCC structure, as they yield the weakest number of reef pairs found in the same SCC during all 10 simulated year, with Ofav having the least stable SCC structure. On the other hand, the largest number of reef pairs found in the same SCC during all 10 simulated years was observed in the connectivity network of Ofav. This suggests that this species had the most stable SCC structure. A comparison of the SCC composition of Ofav and Dlab in 2015 and 2016 is shown in Fig. \ref{fig:scc}. While most of the SCC structure is conserved between those two years for Ofav, strong structural differences are observed for Dlab, especially in the Middle Keys and the Dry Tortugas. Finally, for all modeled species, reefs with IDs $5000$ to $10,000$, where often found in the same SCC during several simulated years. This corresponds to reefs located in the Middle and Upper Keys. This suggests that reefs of these areas tend to be strongly connected to each other for all species.
+Self-recruitment exhibited the largest inter-annual variability, with large values of quartile coefficients of dispersion on most reefs. This is consistent with the absence of clear clusters of bottom-performers in terms of self-recruitment. Local retention varied significantly through time as well, except in the Marquesas, Biscayne, and North Palm Beach, where smaller quartile coefficients of dispersion were found. Most reefs showed limited inter-annual variability of weighted in- and out-degrees, except in the Dry Tortugas and Marquesas. Larger values of the quartile coefficient of dispersion were also found in North Palm Beach and the Lower Keys in the case of weighted out-degree.
+\begin{figure}
+    \centering
+    \includegraphics[width=\textwidth]{figures/species_averaged_quartile_coefficient_of_dispersion.png}
+    \caption{Species-averaged quartile coefficient of dispersion of the four selected indicators. Weighted in- and out-degrees only exhibited significant inter-annual variability in some parts of FCR, while significant inter-annual variability in terms of local retention and self-recruitment was observed on most reefs.}\label{fig:variability}
+
+
+\end{figure}
+
+The structure and composition of the SCCs evolved through time for each simulated species (Fig. \ref{fig:scc}). Acer, Mcav and Ofav exhibited the least stable SCC structure, as they yield the weakest number of reef pairs found in the same SCC during all 10 simulated year, with Ofav having the least stable SCC structure. The largest number of reef pairs found in the same SCC during all 10 simulated years was observed in the connectivity network of Dlab, suggesting that this species had the most stable SCC structure. A comparison of the SCC composition of Ofav and Dlab in 2017 and 2018 is shown in Fig. \ref{fig:scc}. While most of the SCC structure is conserved between those two years for Dla,; strong structural differences are observed for Ofav, especially in the Middle Keys and the Dry Tortugas. Nonetheless, some reefs were consistently found in the same communities for all simulated species and years. These reefs are located in the northern Dry Tortugas, north of the Marquesas, and in the Upper Keys.
 
 \begin{figure}
     \centering
     \includegraphics[width=\textwidth]{figures/comparison_sccs.png}
-    \caption{SCCs of the connectivity networks of Ofav (\textbf{top}), and Dlab (\textbf{middle}) in 2015 and 2016, and the symmetrical matrix counting the number of simulated years during which each pair of reefs was found in the same SCC for these 2 species. \textbf{Bottom}: Number of reef pairs found in the same SCC vs. the number of simulated years during which they were found in the same community for each modeled coral species.}\label{fig:scc}
+    \caption{SCCs of the connectivity networks of Ofav (\textbf{top}), and Dlab (\textbf{middle}) in 2015 and 2016, and the symmetrical matrix counting the number of simulated years during which each pair of reefs was found in the same SCC for these 2 species. Reefs are ordered according to their geographical coordinates. Reefs of the bottom left (resp. top right) of the matrix correspond to reefs located in the south-west (resp. north east) of Florida's Coral Reef. \textbf{Bottom}: Number of reef pairs found in the same SCC vs. the number of simulated years during which they were found in the same community for each modeled coral species. The connectivity networks of Dlab and Pstr exhibit larger more stable communities compared to Ofav and Mcav.}\label{fig:scc}
 \end{figure}
 
-\begin{figure}
-    \centering
-    \includegraphics[width=\textwidth]{figures/counters_leiden.png}
-    \includegraphics[width=.8\textwidth]{figures/histogram_leiden.png}
-    \caption{\textcolor{red}{Same procedure applied to Leiden communities. The results are quite different}}\label{fig:leiden}
-\end{figure}
 
 % === DISCUTION ===
 
@@ -246,20 +250,16 @@ The structure and composition of the SCCs evolved through time for each simulate
 
 \textbf{Paragraph idea:} Potential for coupled restoration
 
-\textbf{Paragraph idea:} The importance of inter-annual variability of the connectivity indicators (based on results of Fig. \ref{fig:scc}) \textcolor{red}{add Fig. \ref{fig:variabibility} to results ?}
+\textbf{Paragraph idea:} Explain the location of some top/bottom-performers based on hydro
+
+\textbf{Paragraph idea:} The importance of inter-annual variability of the connectivity indicators
 
 \textbf{Paragraph idea:} Importance of robust connectivity estimates to optimize coral restoration in regard of climate change.
 
 \textbf{Paragraph idea:} Limitations of the study: 2D model $+$ Potential connectivity $\rightarrow$ habitat suitability and post-settlement survival not considered $+$ we assumed an uniform coral cover over all reefs by lack of information
 
-\begin{figure}
-    \centering
-    \includegraphics[width=\textwidth]{figures/fig_std.png}
-    \caption{\textcolor{red}{[Additional result ?]} Species-averaged standard deviation of the reef value of all connectivity indicators, expressed as a percentage of the yearly-averaged reef value.}\label{fig:variabibility}
-\end{figure}
 
 % === CONCLUSION ===
-
 \section*{Conclusion}
 
 \lipsum[1-1]
@@ -291,6 +291,16 @@ The authors declare no competing interests.
 
 \bibliographystyle{elsarticle-harv}
 \bibliography{biblio.bib}
+\newpage
+\appendix
+
+\section{Invariant component of the SCCs}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\textwidth]{figures/mean_counter.png}
+    \caption{Reefs in the same SCC for all simulated years and species}\label{fig:mean_counter}
+\end{figure}
 
 \end{document}
 \endinput
