@@ -29,7 +29,7 @@
 \definecolor{orange}{rgb}{1,0.5,0}
 \definecolor{yellow}{rgb}{1,1,0}
 \newcommand{\emphc}[1]{\emph{\textcolor{red}{#1}}}
-\newcommand{\modif}[1]{\textcolor{blue}{#1}}
+\newcommand{\modif}[1]{{#1}}
 \newcommand{\added}[1]{\textcolor{orange}{#1}}
 \newcommand{\mean}[1]{\langle {#1} \rangle}
 \newcommand{\todo}[1]{\textbf{\textcolor{red}{$\otimes$ TODO: #1}}}
@@ -47,7 +47,7 @@
 \newcommand{\ofav}{{\it O.~faveolata}\ }
 
 
-\journal{TDB}
+\journal{Coral Reefs}
 
 \begin{document}
 	
@@ -123,7 +123,7 @@
 	
 	Connectivity-informed coral restoration can directly repopulate small reef areas but, if environmental conditions are favorable, also indirectly accelerate natural processes of recovery through sexual reproduction and recruitment on neighbouring reefs. When genetically different corals are outplanted on the reef in close proximity, it increases the chances their gametes will get fertilized \citep{omori2019coral}. Moreover, if restoration site selection is focused on reefs that distribute larvae to a greater number of farther, unrestored reefs (termed source reefs, \citealp{bode2018resilient}) due to local currents \citep{king2023larval}, it could (if local environmental conditions were favorable) hasten reef recovery and the broader resilience to disturbances. Reef connectivity, and thus the location of source reefs within a reef system, can be determined using biophysical models of coral larval dispersal \citep{frys2020fine,figueiredo2022global,holstein2014consistency,holstein2022predicting,king2023larval}. These models use high-resolution (multi-year) ocean circulation dynamics and empirically calibrated larval dynamics, specifically larval survival (how long larvae remain alive for) and competency (when larvae become ready to settle and metamorphose into a coral polyp and when this ability is lost), to predict larval dispersal and settlement within a reef system. The accuracy of these models therefore directly depends on larval trait estimates, which are generally experimentally calibrated \citep{limer2024life}.
 	
-	Understanding reef connectivity is also important to determine where to place marine protected areas (MPAs), identify areas which are more vulnerable to disturbance (by being less connected to upstream reefs and hence with fewer chances to be repopulated by them), and areas which are more resilient (well-connected). Interspecific differences in larval survival and competency determine the species’ tendency to either settle on their natal reef (local retention, a measure of reef’s self-persistence) and/or disperse long-distances, potentially recolonizing distant reefs thus increasing the connectivity and genetic diversity of its populations. At the reef level, having high levels of local retention (proportion of larvae produced by a reef that settled back on that reef) means this reef has a higher ability of self-replenishment. If a reef has high self-recruitment (proportion of the settlers on a reef that originated from larvae produced on that reef) it means it is highly isolated. However, due to the relative nature of this indicator, reefs with high self-recruitment might still receive relatively fewer settlers from numerous reefs. Therefore, total settlement on the reef must be known to confirm isolation in the network.  Although more shielded from human influence, isolated reefs are more susceptible to larger perturbations such as severe storms or oil spills \citep{baumann2022remoteness} because if disturbed they are rarely replenished by larvae coming from other locations. Sink reefs \textit{i.e.}, reefs which receive larvae from many other reefs, have a high network persistence and are expected to recover faster following disturbances. Source reefs are optimal locations for marine resource managers to prioritize for protection; the preservation of source reef through marine reserves or MPAs ensures larval supply at both local and regional scales \citep{muenzel2023integrating}, contributing to the resilience of entire reef system.
+	Understanding reef connectivity is also important to determine where to place marine protected areas (MPAs), identify areas which are more vulnerable to disturbance (by being less connected to upstream reefs and hence with fewer chances to be repopulated by them), and areas which are more resilient (well-connected). Interspecific differences in larval survival and competency determine the species’ tendency to either settle on their natal reef (local retention, a measure of reef’s self-persistence) and/or disperse long-distances, potentially recolonizing distant reefs thus increasing the connectivity and genetic diversity of its populations. At the reef level, having high levels of local retention (proportion of larvae produced by a reef that settled back on that reef) means this reef has a higher ability of self-replenishment. If a reef has high self-recruitment (proportion of the settlers on a reef that originated from larvae produced on that reef) it means it could be highly isolated. However, due to the relative nature of this indicator, reefs with high self-recruitment might still receive high exogenous recruitment, even if relatively lower than endogenously sourced recruitment. Therefore, total settlement on the reef must be known to confirm isolation in the network.  Although more shielded from human influence, isolated reefs are more susceptible to larger perturbations such as severe storms or oil spills \citep{baumann2022remoteness} because if disturbed they are rarely replenished by larvae coming from other locations. Sink reefs \textit{i.e.}, reefs which receive larvae from many other reefs, have a high network persistence and are expected to recover faster following disturbances. Source reefs are optimal locations for marine resource managers to prioritize for protection; the preservation of source reef through marine reserves or MPAs ensures larval supply at both local and regional scales \citep{muenzel2023integrating}, contributing to the resilience of entire reef system.
 	
 	As biophysical models used to estimate reef connectivity at a fine spatial scale typically require significant computational resources, most connectivity studies cover thus a limited number of spawning events and coral species. This undermines the robustness of the derived connectivity estimates, as they lack interannual and interspecific variability. In this study, we fill in this gap by simulating the dispersal of larvae from six key reef-building coral species of Florida over 10 consecutive years (2012-2021). Using these 10 years of simulation, we identify consistent connectivity hotspots and strongly connected reef clusters for all simulated years and species. Furthermore, by identifying pairs of coral species with strongly correlated connectivity metrics, we highlight the potential for coupled management strategies.
 	
@@ -341,17 +341,13 @@ Finally, we assessed the number of simulated years needed to capture the magnitu
 	The \slim source code can be found at \href{https://git.immc.ucl.ac.be/slim/slim}{https://git.immc.ucl.ac.be/slim/slim}.
 	
 	\section*{Acknowledgements}
-	
-	Computational resources have been provided by the supercomputing facilities of the \textit{Universit\'e catholique de Louvain} (CISM/UCLouvain) and the \textit{Consortium des \'Equipements de Calcul Intensif en F\'ed\'eration Wallonie Bruxelles} (CECI) funded by the \textit{Fonds de la Recherche Scientifique de Belgique} (F.R.S.-FNRS) under convention 2.5020.11. Thomas Dobbelaere is a postdoctoral researcher supported by the F.R.S-FNRS. Florida Department of Environmental Protection for research funds awarded to J.F., MSC Foundation for scholarship awarded to R.C., University of North Carolina Wilmington and Florida Aquarium’s Center for Conservation for the donation of larvae, and all members of the NSU’ Marine Larval Ecology and Recruitment lab for assistance. Activities were conducted under the Florida Fish and Wildlife permit SAL-22-2238A-SCRP.
+	This publication was made possible with support from the National Oceanic and Atmospheric Administration (NOAA)'s Coral Reef Conservation Program (CRCP). Computational resources have been provided by the supercomputing facilities of the \textit{Universit\'e catholique de Louvain} (CISM/UCLouvain) and the \textit{Consortium des \'Equipements de Calcul Intensif en F\'ed\'eration Wallonie Bruxelles} (CECI) funded by the \textit{Fonds de la Recherche Scientifique de Belgique} (F.R.S.-FNRS) under convention 2.5020.11. T.D. is a postdoctoral researcher supported by the F.R.S-FNRS. This work was also supported by research funding from the Florida Department of Environmental Protection awarded to J.F. and a scholarship from the MSC Foundation awarded to R.C. We thank the University of North Carolina Wilmington and the Florida Aquarium’s Center for Conservation for donating larvae, and all members of the NSU Marine Larval Ecology and Recruitment Lab for their invaluable assistance throughout the study. All activities were conducted under Florida Fish and Wildlife Conservation Commission permit SAL-22-2238A-SCRP.
 	
 	\section*{Author contributions statement}
-	Thomas Dobbelaere: Conceptualization; software; writing – original draft. Ryan Chabotte: Data collection (??). Joana Figueiredo: Conceptualization; data collection and processing, writing – review and editing. Daniel M. Holstein: Conceptualization; writing – review and editing. Emmanuel Hanert: Conceptualization; project administration; supervision; writing – review and editing.
-	
-	\emphc{to be updated...}
+	T.D.: Conceptualization; software; writing – original draft. R.C.: Data collection and analysis. J.F.: Conceptualization; data collection and analysis; writing – review and editing. D.M.H.: Conceptualization; writing – review and editing. E.H.: Conceptualization; project administration; supervision; writing – review and editing.
 	
 	\section*{Competing interests}
-	
-	The authors declare no competing interests.
+	J.F. serves as a Topic Editor for Coral Reefs.
 	
 	%  === REFERENCE ===
 	
@@ -459,4 +455,3 @@ Finally, we assessed the number of simulated years needed to capture the magnitu
 
 \end{document}
 \endinput
-
